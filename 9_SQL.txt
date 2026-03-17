@@ -1,0 +1,13 @@
+https://www.practicewindowfunctions.com/problem/9/lowest-deals-in-the-galaxy
+
+Lowest Deals in the Galaxy
+:
+Find the Minimum Product Price Per Category with Comparative Pricing
+Intermediate
+Identify the lowest-priced product per category and compare it to the current price.
+Xorthax wants to identify the lowest price for each product category sold at his trading post. Write a query to display the minimum price for each category, along with the product name and its current price.
+
+select p.category, p.name as productname,
+p.price,
+min(p.price) over (partition by p.category) as lowestcategoryprice
+from products p

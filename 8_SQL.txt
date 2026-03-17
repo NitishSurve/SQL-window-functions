@@ -1,0 +1,13 @@
+https://www.practicewindowfunctions.com/problem/8/five-transaction-trail-tracker
+
+Five Transaction Trail Tracker
+:
+Analyze Customer Spending Trends with Rolling Transaction Totals
+Intermediate
+Measure each customer's spending trend over their last five transactions.
+Xorthax wants to see customer spending behavior over time. For each customer, return their order date, total amount and the rolling five transaction total for all transactions.
+
+select customerid, orderdate, totalamount, 
+sum(totalamount) over (partition by customerid order by orderdate 
+ROWS between 4 preceding and current row) as rollingspending
+from orders

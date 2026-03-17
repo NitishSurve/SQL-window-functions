@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/10/the-galactic-max-order-hunt
+
+The Galactic Max Order Hunt
+:
+Identify Each Customer’s Maximum Order Value Sorted by Date
+Intermediate
+Discover each customer's largest single order; sorted by time.
+Xorthax is curious about the largest single order placed by each of his intergalactic customers. Write a query to calculate the maximum order amount for each customer, ordered by the order date.
+
+select o.customerid,
+o.orderid, 
+o.orderdate, 
+o.totalamount,
+max(o.totalamount) over (partition by o.customerid) as
+maxorderamount
+from orders o
+order by o.customerid, o.orderdate

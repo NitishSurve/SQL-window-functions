@@ -1,0 +1,29 @@
+Species Spending Champions
+:
+Find the Highest Average Revenue Customers Within Each Species
+Advanced
+Find customers whose average revenue matches the top spenders of their species.
+Xorthax wants to identify the top spenders within each species group at his trading post. Write a query to calculate each customer's average revenue and return only those customers whose average revenue matches the highest in their species.
+
+with avgc as
+(
+	select c.customerid,
+	c.species,
+	avg(o.totalamount) as averagerevenue from
+	customers c join orders o 
+	on c.customerid = o.customerid
+	group by c.customerid, c.species
+)
+select customerid,
+	species,
+	averagerevenue
+from 
+(
+	select customerid, 
+	species,
+	averagerevenue,
+	max(averagerevenue) over (partition by species) as 
+	max_species
+	from avgc
+) second
+where averagerevenue = max_species
