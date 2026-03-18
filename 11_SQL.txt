@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/11/the-largest-order-in-the-galaxy
+
+The Largest Order in the Galaxy
+:
+Calculate the Highest Order Value Across All Customers
+Intermediate
+Reveal every order that matches the highest total ever placed.
+Xorthax wants to identify all customers who placed the largest single order in the galaxy. Write a query to calculate the highest order amount and return every order that matches that amount.
+
+select o.customerid,
+o.orderid,
+o.totalamount from 
+orders o 
+where o.totalamount =
+(
+	select max(o.totalamount) from orders o
+ )

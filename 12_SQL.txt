@@ -1,0 +1,16 @@
+https://www.practicewindowfunctions.com/problem/12/interstellar-spending-sprees
+
+Interstellar Spending Sprees
+:
+Measure Customer Spending Patterns with Rolling Three-Order Averages
+Intermediate
+Track rolling 3-order spending averages to find cosmic big spenders.
+Xorthax noticed some customers go on interstellar spending sprees. Help him analyze customer behavior by calculating the rolling 3-order average of total amount spent for each customer, ordered by order date.
+
+select o.customerid,
+o.orderid,
+o.orderdate,
+o.totalamount,
+round(avg(o.totalamount) over (partition by o.customerid order by o.orderdate
+ROWS between 2 preceding and current row)::numeric,2) as rollingavgspend
+from orders o 

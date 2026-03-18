@@ -1,0 +1,14 @@
+https://www.practicewindowfunctions.com/problem/13/order-volume-customer-by-customer
+
+Order Volume, Customer by Customer
+:
+Calculate Total Orders Per Customer with Individual Order Details
+Intermediate
+Count total orders per customer and display them alongside each order.
+Xorthax is reviewing his intergalactic sales data. Help him count the total number of orders placed by each customer at his trading post. Display each order's details along with the total number of orders for that customer.
+
+select o.customerid, o.orderid,
+count(o.orderid) over (partition by o.customerid) as
+totalorders
+from orders o
+

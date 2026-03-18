@@ -1,0 +1,49 @@
+https://www.practicewindowfunctions.com/problem/15/galactic-high-spenders-by-week
+
+Galactic High Spenders by Week
+:
+Track Weekly Top-Spending Customers with Aggregate Window Functions
+Advanced
+Discover which customers spend the most credits each week at Xorthax’s trading post.
+Xorthax wants to identify his wealthiest patrons by week. For each customer, show their total spending for each week, highlight which customers had the highest total spend during that week with a t/f, and the rank of each customer for the week. All spending figures should be based on the orderdetails table.
+
+with line as
+( 
+	select o.customerid,
+	date_trunc('week', o.orderdate)::date as week_start,
+	od.quantity * od.unitprice as lineamount
+	from orders o join orderdetails od
+	on od.orderid = o.orderid 
+),
+per_customer_week as
+(
+	select customerid, week_start,
+	sum(lineamount) over (partition by customerid, week_start) as total_spend
+	from line
+),
+dedup as
+(
+	select distinct customerid,
+	week_start,
+	total_spend from
+	per_customer_week
+), 
+scored as
+(
+	select customerid,
+	week_start,
+	total_spend,
+	max(total_spend) over (partition by week_start) as max_total_in_week,
+	rank() over (partition by week_start order by total_spend desc) as top_rank
+	from dedup
+)
+select customerid,
+	week_start,
+	total_spend,
+	(total_spend = max_total_in_week) as is_top_spender,
+	top_rank
+from scored
+order by week_start,
+         total_spend desc,
+         customerid
+
