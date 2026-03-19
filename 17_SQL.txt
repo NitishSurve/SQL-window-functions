@@ -1,0 +1,14 @@
+https://www.practicewindowfunctions.com/problem/17/order-by-order-one-by-one
+
+Order by Order, One by One
+:
+Identify Each Customer’s Chronological Order Sequence
+Intermediate
+Assign a row number to each customer's orders based on the order date.
+Xorthax wants to identify the sequence of orders placed by each customer based on the order date. Write a query to assign a row number to each order for every customer.
+
+select o.customerid,
+o.orderid,
+o.orderdate,
+row_number() over (partition by o.customerid order by orderdate) as orderrank
+from orders o

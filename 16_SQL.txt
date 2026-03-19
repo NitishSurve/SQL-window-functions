@@ -1,0 +1,21 @@
+https://www.practicewindowfunctions.com/problem/16/30-days-of-distinct-artifacts
+
+30 Days of Distinct Artifacts
+:
+Count Unique Artifacts Sold by Category in the Last 30 Days
+Intermediate
+Measure the unique items sold per category over the last month.
+The inventory of cosmic artifacts at Xorthax's trading post is vast. Help him determine how many distinct artifacts (product ids) have been sold in the last 30 days for each category. Use a CTE to filter the data, and then apply a window function.
+
+with recentsales as
+(
+	select distinct od.productid,
+	p.category
+	from orderdetails od join products p on
+	od.productid = p.productid
+	join orders o on od.orderid = o.orderid
+	where o.orderdate::timestamp >= current_date - interval '30 days'
+)
+select distinct category,
+	count(productid) over (partition by category) as distinctartifactssold
+from recentsales

@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/18/the-first-transaction-initiative
+
+The First Transaction Initiative
+:
+Find Each Customer’s Earliest Recorded Transaction Date
+Advanced
+Find the very first recorded purchase for every galactic customer.
+The galactic accounting department at Zlacksys 19 needs to identify the first transaction made by each customer. Write a query to display each customer's first transaction based on the transaction date.
+
+select customerid, transactionid,
+transactiondate from
+(
+	select customerid, transactionid,
+	transactiondate,
+	row_number() over (partition by customerid order by transactiondate) as rn
+	from transaction
+) t
+where rn = 1
+
