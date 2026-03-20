@@ -1,0 +1,23 @@
+https://www.practicewindowfunctions.com/problem/23/top-3-galactic-bestsellers
+
+Top 3 Galactic Bestsellers
+:
+Identify the Three Most Sold Products Across the Galaxy
+Intermediate
+Rank products based on total quantity sold and highlight the top 3.
+Xorthax wants to identify the top 3 most traded products in the galaxy based on total quantity sold. Assign a rank to each product, with the highest quantity sold ranked first. Solve this without using 'Top 3'.
+
+with tq as
+(
+	select productid, sum(quantity) as totalquantity
+	from orderdetails 
+	group by productid
+),
+toprank as
+(
+	select productid, totalquantity, row_number()
+	over (order by totalquantity desc)
+	as rank from tq
+)
+select productid, totalquantity, rank
+from toprank where rank <= 3

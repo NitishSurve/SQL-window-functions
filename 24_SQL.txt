@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/24/species-spending-standings
+
+Species Spending Standings
+:
+Rank Customers by Total Spending Within Their Species Groups
+Intermediate
+Rank customers within their species by how much they spent on Xorthax's wares.
+Xorthax is ranking his customers based on their total spending in the galaxy. Rank customers within their respective species based on their total spending at his trading post.
+
+with totalsp as 
+(
+	select c.species, c.customerid, sum(o.totalamount) as totalspending from customers c join orders o
+	on c.customerid = o.customerid
+	group by c.customerid, c.species
+)
+select species, customerid, totalspending, row_number()
+	over (partition by species order by totalspending desc) as rank from totalsp

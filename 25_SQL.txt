@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/25/most-popular-products-in-the-galaxy
+
+Most Popular Products in the Galaxy
+:
+Rank Galactic Products by Total Quantity Sold and Popularity
+Intermediate
+Determine which products lead in sales volume across the stars.
+Xorthax wants to know which products are the most popular. Rank the products by the total quantity sold across the galaxy.
+
+with totalq as
+(
+	select o.productid, p.name as productname,
+	sum(o.quantity) as totalquantity from orderdetails o
+	join products p on o.productid = p.productid
+	group by o.productid, p.name
+)
+select productid, productname, totalquantity,
+	row_number() over (order by totalquantity desc) as rank
+	from totalq

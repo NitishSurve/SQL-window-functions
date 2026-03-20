@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/21/the-peak-stock-protocol
+
+The Peak Stock Protocol
+:
+Find the Highest Stock Level per Product Across the Galaxy
+Advanced
+Display the record with the highest inventory for each product in the galaxy.
+The inventory team at Xorthax's trading post needs to know the highest recorded stock level for each product. Write a query to display only the record with the highest quantity available for each product.
+
+with maxtotal as
+(
+	select productid, quantityavailable,
+	row_number() over (partition by productid order by quantityavailable desc) 
+	as rn from inventory
+)
+select productid, quantityavailable from maxtotal
+where rn=1;

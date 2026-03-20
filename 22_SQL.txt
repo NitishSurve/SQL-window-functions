@@ -1,0 +1,26 @@
+https://www.practicewindowfunctions.com/problem/22/clone-order-detector
+
+Clone Order Detector
+:
+Find and Analyze Duplicate Customer Orders by Date and Amount
+Advanced
+Identify duplicate orders by customer, date, and total ... and assign row numbers.
+Xorthax suspects duplicate orders. Write a query to identify all duplicate orders for the same customer with the same total amount and order date. Display both records for each duplicate found order by customerid and ordered
+
+with dup as
+(
+	select customerid, orderid, orderdate, totalamount,
+	row_number() over (partition by customerid, orderdate, totalamount order by orderid) as rn from orders
+),
+is_dup as
+(
+	select customerid, orderid, orderdate, totalamount
+	from dup where rn > 1
+)
+select o.* from orders o
+	join is_dup id
+	on o.customerid = id.customerid
+	and o.orderdate = id.orderdate
+	and o.totalamount = id.totalamount
+	order by o.customerid,
+		o.orderid
