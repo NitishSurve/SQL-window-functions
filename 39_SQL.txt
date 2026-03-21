@@ -1,0 +1,28 @@
+https://www.practicewindowfunctions.com/problem/39/the-rare-and-the-profitable
+
+The Rare and the Profitable
+:
+Identify High-Revenue Products Among Low-Inventory Items Using Recent Sales Data
+Advanced
+Group low-inventory products by revenue to find which rare items sell best.
+Xorthax suspects that the rarest artifacts in his trading post — those with the lowest remaining stock — are also the most lucrative. To test this, examine products with low inventory and rank them into 4 tiers based on the total revenue they generated in the last 30 days.
+
+with recentsales as 
+(
+select p.productid, p.name as productname,
+	i.quantityavailable,
+	sum(p.price * od.quantity) as totalrevenue
+	from orderdetails od join orders o
+	on od.orderid = o.orderid
+	join products p 
+	on od.productid = p.productid
+	join inventory i 
+	on od.productid = i.productid
+	where o.orderdate::timestamp >= current_date - interval '30 days'	
+	group by p.productid, p.name,
+	i.quantityavailable
+)	
+select productid, productname, quantityavailable,
+	totalrevenue,
+	ntile(4) over (order by totalrevenue desc) as demandtier
+	from recentsales

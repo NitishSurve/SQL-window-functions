@@ -1,0 +1,20 @@
+https://www.practicewindowfunctions.com/problem/36/stock-level-stratification
+
+Stock Level Stratification
+:
+Group Products by Inventory Levels into Four Category-Based Stock Tiers
+Intermediate
+Assign products to 4 tiers based on their current inventory levels.
+Xorthax needs to group products into 4 tiers based on the sum of their stock levels currently available (quantityavailable) at his trading post. Write a query to assign stock tiers for each product category by totalstock descending.
+
+with tier as
+(
+	select p.category, p.productid, sum(i.quantityavailable) as
+	totalstock from products p join 
+	inventory i on
+	p.productid = i.productid
+	group by p.category, p.productid
+) 
+select category, productid, totalstock, 
+	ntile(4) over (partition by category order by totalstock desc) as stocktier
+from tier

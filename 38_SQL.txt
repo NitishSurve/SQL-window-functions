@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/38/species-based-order-tiers
+
+Species-Based Order Tiers
+:
+Group Orders by Total Amount into Four Spending Levels per Species
+Intermediate
+Rank orders into 4 spending groups within each species.
+Xorthax wants to categorize all orders into 4 spending tiers for each species. Write a query to rank orders by total amount within each species.
+
+with tier as
+(
+	select c.species, o.orderid, sum(o.totalamount) as totalamount
+	from customers c join orders o 
+	on c.customerid = o.customerid
+	group by c.species, o.orderid
+)
+select species, orderid, totalamount, 
+	ntile(4) over (partition by species order by totalamount desc) as spendingtier
+	from tier

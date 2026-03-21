@@ -1,0 +1,20 @@
+https://www.practicewindowfunctions.com/problem/40/species-revenue-classifications
+
+Species Revenue Classifications
+:
+Group Species by Total Revenue into Five Spending Tiers
+Intermediate
+Rank species into 5 tiers based on total spending at Xorthax's post.
+Xorthax wants to rank different species into 5 tiers based on their total revenue at his trading post. Write a query to assign tiers to species based on their total spending.
+
+with finalr as
+(
+	select c.species, sum(o.totalamount) as totalrevenue
+	from customers c join orders o 
+	on  c.customerid = o.customerid
+	group by c.species
+)
+select species, totalrevenue,
+ntile(5) over (order by totalrevenue desc) 
+as revenuetier
+from finalr

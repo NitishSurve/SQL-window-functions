@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/37/supplier-pricing-pyramid
+
+Supplier Pricing Pyramid
+:
+Group Suppliers by Average Product Cost into Three Pricing Tiers
+Intermediate
+Divide suppliers into 3 pricing bands based on average product cost.
+Xorthax is evaluating suppliers based on the average price of the products they supply. Divide suppliers into 3 pricing tiers.
+
+with tier as
+(
+	select s.supplierid, s.name as suppliername,
+	avg(p.price) as averageprice from suppliers s
+	join products p 
+	on s.supplierid= p.supplierid
+	group by s.supplierid, s.name
+)
+select supplierid, suppliername, averageprice,
+	ntile(3) over (order by averageprice desc) as pricingtier from tier
