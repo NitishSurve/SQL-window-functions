@@ -1,0 +1,13 @@
+https://www.practicewindowfunctions.com/problem/35/customer-frequency-classes
+
+Customer Frequency Classes
+:
+Segment Customers by Order Frequency into Three Transaction Tiers
+Intermediate
+Group customers by how often they place orders at Xorthax's post.
+Xorthax wants to segment customers into 3 groups based on the total number of orders they placed. Write a query to assign each customer to a transaction frequency tier.
+
+select customerid, count(orderid) as totalorders,
+ntile(3) over (order by count(orderid) desc) as frequencytier
+from orders
+group by customerid

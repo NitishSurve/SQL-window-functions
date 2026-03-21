@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/34/five-tiers-of-product-fame
+
+Five Tiers of Product Fame
+:
+Group Products by Sales Volume into Five Popularity Tiers
+Intermediate
+Classify products into 5 groups based on total quantity sold.
+Xorthax wants to divide all products into 5 popularity tiers based on the total quantity sold across the galaxy. Write a query to rank products into these tiers.
+
+with totalq as
+(
+select p.productid, p.name as productname, sum(od.quantity)
+	as totalquantity from products p
+	join orderdetails od
+	on p.productid = od.productid
+	group by p.productid, p.name
+)
+select productid, productname, totalquantity,
+ntile(5) over (order by totalquantity desc) as popularitytier from totalq

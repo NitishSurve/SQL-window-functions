@@ -1,0 +1,23 @@
+https://www.practicewindowfunctions.com/problem/33/galactic-spending-tiers
+
+Galactic Spending Tiers
+:
+Divide Customers into Four Spending Levels Within Their Species
+Intermediate
+Segment customers into 4 spending levels within their species.
+Xorthax wants to group his customers into 4 tiers based on their total spending at his trading post. Write a query to assign each customer to a spending tier within their species.
+
+with customertotals as
+  (select c.species,
+          o.customerid,
+          sum(o.totalamount) as totalspending
+   from orders o
+   join customers c on o.customerid = c.customerid
+   group by c.species,
+            o.customerid)
+select species,
+       customerid,
+       totalspending,
+       ntile(4) over (partition by species
+                      order by totalspending desc) as spendingtier
+from customertotals;
