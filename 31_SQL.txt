@@ -1,0 +1,21 @@
+https://www.practicewindowfunctions.com/problem/31/category-spend-royalty
+
+Category Spend Royalty
+:
+Rank Customers by Total Spending Within Each Product Category
+Advanced
+Rank customers by total spending within each product category.
+Xorthax wants to determine a unique leaderboard of top spenders for each product category. Assign a distinct rank to each customer within their category based on their total spending, even if some totals are the same.
+
+with totala as
+(
+	select o.customerid, p.category,
+	sum(od.quantity * p.price) as totalspending from orderdetails od
+	join orders o on od.orderid = o.orderid
+	join products p on od.productid = p.productid
+	group by o.customerid, p.category 
+)
+select customerid, category,
+	totalspending,
+	row_number() over (partition by category order by totalspending desc) as rank
+from totala

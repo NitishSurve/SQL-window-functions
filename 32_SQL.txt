@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/32/first-contact-by-category
+
+First Contact by Category
+:
+Find Each Customer’s Earliest Purchase in Every Product Category
+Intermediate
+Rank customers by total spending within each product category.
+Xorthax wants to identify each customer's first purchase within every product category. Write a query to return only their earliest order per category.
+
+with od as
+(
+	select o.customerid, p.category, o.orderid,
+	o.orderdate, row_number() over (partition by o.customerid, p.category order by o.orderdate) as rn from orders o join orderdetails od 
+on o.orderid = od.orderid
+join products p on od.productid = p.productid
+)
+select customerid, category, orderid, orderdate
+from od
+where rn = 1
