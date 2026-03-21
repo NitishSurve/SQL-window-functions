@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/28/species-revenue-leaderboard
+
+Species Revenue Leaderboard
+:
+Compare Species by Total Revenue to Identify Top-Earning Groups
+Intermediate
+Find out which species are Xorthax's most valuable patrons by revenue.
+The merchants guild of Zlacksys 19 wants to identify the species generating the most revenue for Xorthax. Write a query to rank species based on their total revenue at the trading post.
+
+with totalr as
+(
+	select c.species, sum(o.totalamount) as totalrevenue from
+	customers c join orders o on
+	c.customerid = o.customerid
+	group by c.species
+)
+select species, totalrevenue, row_number() over (order by totalrevenue desc) as rank from totalr

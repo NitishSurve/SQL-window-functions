@@ -1,0 +1,17 @@
+https://www.practicewindowfunctions.com/problem/26/supplier-showdown
+
+Supplier Showdown
+:
+Evaluate Suppliers by Number of Unique Products Supplied
+Intermediate
+Rank suppliers by how many unique products they offer the galaxy.
+Xorthax is evaluating his suppliers. Write a query to rank suppliers based on the total number of unique products they supply.
+
+with un as 
+(
+	select supplierid, count(distinct productid) as uniqueproducts from products
+group by supplierid
+)
+select supplierid, uniqueproducts,
+rank() over (order by uniqueproducts desc) as rank
+from un

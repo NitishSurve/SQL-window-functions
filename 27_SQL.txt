@@ -1,0 +1,23 @@
+https://www.practicewindowfunctions.com/problem/27/5-transaction-tally-tracker
+
+5-Transaction Tally Tracker
+:
+Analyze Customer Transaction Patterns Using Rolling Sums and Order Rankings
+Intermediate
+Calculate a rolling sum of each customer's last 5 orders and rank them accordingly.
+Xorthax wants to analyze the transaction volume for each customer. Write a query to rank each order within its customer's history based on the rolling sum of the last 5 transactions.
+
+with transv as
+(
+	select customerid, orderid, orderdate,
+	sum(totalamount) as totalamount,
+	sum(totalamount) over (partition by customerid
+	order by orderdate rows between 4 preceding and current row) as rollingtotal from orders
+	group by customerid, orderid, orderdate, totalamount
+)
+
+select customerid, orderid, orderdate, 
+totalamount, rollingtotal,
+rank() over (partition by customerid order by rollingtotal desc) as rank
+from transv
+	

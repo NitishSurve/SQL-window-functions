@@ -1,0 +1,15 @@
+https://www.practicewindowfunctions.com/problem/30/order-titans-of-the-stars
+
+Order Titans of the Stars
+:
+Rank Customers by Their Largest Single Order Value with Tie-Aware Results
+Intermediate
+Spot the customers with the most orders and compare their rankings.
+Xorthax wants to understand how frequently each customer shops at his trading post. Calculate how many orders each customer has placed, then assign two types of rankings: one that gives tied customers the same position without skipping any numbers, and another that assigns the same position to ties but does skip numbers
+
+with totalr as
+(
+	select customerid, count(orderid) as ordercount from orders
+	group by customerid
+)
+select customerid, ordercount, dense_rank() over (order by ordercount desc) as rank1, rank() over (order by ordercount desc) as rank2 from totalr

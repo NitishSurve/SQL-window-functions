@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/29/category-revenue-rankings
+
+Category Revenue Rankings
+:
+Rank Product Categories by Total Sales with Tie-Aware Revenue Comparison
+Intermediate
+Assign fair, tied-aware ranks to product categories based on their total sales.
+Xorthax wants to compare products within each category to see which ones generate the most revenue. Write a query that calculates total revenue per product and ranks the products within each category, ensuring that ties receive the same rank without skipping numbers.
+
+with totalr as
+(
+	select p.category, p.productid, sum(o.quantity * p.price)
+	as totalrevenue from products p join
+	orderdetails o on p.productid = o.productid
+	group by p.category, p.productid
+)
+select category, productid, totalrevenue,
+dense_rank() over (partition by category order by totalrevenue desc) as rank 
+from totalr
