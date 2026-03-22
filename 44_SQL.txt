@@ -1,0 +1,23 @@
+https://www.practicewindowfunctions.com/problem/44/loyalty-group-order-milestones
+
+Loyalty Group Order Milestones
+:
+Determine the Earliest Order Date and First Customer for Each Loyalty Tier
+Intermediate
+Track the first order date for each customer loyalty tier.
+The merchants guild wants to find the first order placed by customers in each loyalty status group. Write a query to find the first order date for each group along with the first customer.
+
+with loyalty as
+(
+	select c.loyaltystatus, c.customerid,
+	o.orderdate,
+	first_value(o.orderdate) over (partition by 	c.loyaltystatus order by o.orderdate) as firstorderdate 
+from customers c join orders o
+	on c.customerid = o.customerid
+)
+select loyaltystatus, 
+	customerid,  
+	firstorderdate
+	from loyalty
+where orderdate = firstorderdate
+	

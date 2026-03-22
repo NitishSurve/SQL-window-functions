@@ -1,0 +1,16 @@
+https://www.practicewindowfunctions.com/problem/45/the-final-purchase-report
+
+The Final Purchase Report
+:
+Find Each Customer’s Most Recent Order Date, ID, and Purchase Amount
+Intermediate
+Discover the most recent order date and amount for every customer.
+Xorthax wants to know the last order placed by each customer in the galaxy. Write a query to find the last order date, order id and amount for every customer.
+
+with last as
+(
+	select customerid, orderid, totalamount, orderdate,
+	last_value(orderdate) over (partition by customerid order by orderdate asc rows between unbounded preceding and unbounded following) as lastorderdate from orders
+)
+select customerid, orderid, totalamount, lastorderdate from last
+where orderdate = lastorderdate 
