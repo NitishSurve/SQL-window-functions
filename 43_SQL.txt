@@ -1,0 +1,30 @@
+https://www.practicewindowfunctions.com/problem/43/the-pioneer-product-in-every-category
+
+The Pioneer Product in Every Category
+:
+Identify the First Product Sold and Its Earliest Sale Date by Category
+Intermediate
+Reveal which product sold first in each category and when.
+Xorthax wants to find the first product sold in each category. Write a query to display the product name and sale date for each category.
+
+
+with s as
+  (select p.category,
+          p.name,
+          o.orderdate,
+          o.orderid,
+          p.productid
+   from orderdetails od
+   join orders o on od.orderid = o.orderid
+   join products p on od.productid = p.productid)
+select distinct category,
+                FIRST_VALUE(name) over (partition by category
+                                        order by orderdate,
+                                                 orderid,
+                                                 productid rows between unbounded PRECEDING and unbounded following) as productname,
+                                       FIRST_VALUE(orderdate) over (partition by category
+                                                                    order by orderdate,
+                                                                             orderid,
+                                                                             productid rows between unbounded PRECEDING and unbounded following) as firstsolddate
+from s
+order by category;

@@ -1,0 +1,19 @@
+https://www.practicewindowfunctions.com/problem/42/species-transaction-origins
+
+Species Transaction Origins
+:
+Find the Earliest Recorded Transaction Date for Each Customer Species
+Intermediate
+Identify the first transaction date for customers of each species.
+Xorthax is curious about the first transaction date for customers of each species. Write a query to display the first transaction date for each species.
+
+with species_transactions as
+  (select c.species,
+          t.transactiondate
+   from orders o
+   join transaction t on o.orderid = t.orderid
+   join customers c on o.customerid = c.customerid)
+select distinct species,
+                first_value(transactiondate) over (partition by species
+                                                   order by transactiondate asc) as firsttransactiondate
+from species_transactions;

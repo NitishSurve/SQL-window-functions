@@ -1,0 +1,23 @@
+https://www.practicewindowfunctions.com/problem/41/the-first-order-ever-placed
+
+The First Order Ever Placed
+:
+Find Each Customer’s Earliest Order Date and Amount in the Galactic Trading Post
+Intermediate
+Find the earliest order date and amount for every customer in the galaxy.
+Xorthax wants to know the first order placed by each customer in the galaxy. Write a query to find the first order date and the orderid and total amount of the first order for every customer.
+
+with first_order as
+  (select customerid,
+          orderid,
+          orderdate,
+          totalamount,
+          first_value(orderdate) over (partition by customerid
+                                       order by orderdate asc) as firstorderdate
+   from orders)
+select customerid,
+       orderid,
+       totalamount,
+       firstorderdate
+from first_order
+where orderdate=firstorderdate
